@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from streamlit_option_menu import option_menu
 
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, mean_absolute_percentage_error,classification_report,accuracy_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, mean_absolute_percentage_error,accuracy_score
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -202,17 +202,62 @@ def cap_outliers(df, column):
     df[column] = df[column].apply(lambda x: lower_bound if x < lower_bound else upper_bound if x > upper_bound else x)
 
 
-st.title('Sales Prediction using Regression Models')
+# st.title('Sales Prediction using Machine Learning')
 with st.sidebar:
     section_name = option_menu("Menu",
-                               options=["About", 'Analytics', 'Models'],
-                               icons=['house-fill', 'search', 'clipboard-data-fill'])
+                               options=['Dashboard', 'Models'],
+                               icons=['search', 'clipboard-data-fill'])
 
-if section_name == 'About': 
-    retail_store_image = Image.open('image/retail store.jpg')
-    st.image(retail_store_image)
+# if section_name == 'About': 
+#     retail_store_image = Image.open('image/retail store.jpg')
+#     st.image(retail_store_image)
 
-if section_name == 'Analytics':
+if section_name == 'Dashboard':
+
+    st.subheader('Categories by Quantity Sold')
+    category_data = retail_store_data.groupby('category').sum().reset_index()
+    # # Extract quantity and amount columns
+    # quantity_columns = [col for col in retail_store_data.columns if 'quantity' in col]
+    # amount_columns = [col for col in retail_store_data.columns if 'amount' in col]
+    total_quantity = category_data[quantity_columns].sum(axis=1)
+    total_amount = category_data[amount_columns].sum(axis=1)
+    category_summary = pd.DataFrame({
+        'Category': category_data['category'],
+        'Total Quantity Sold (Units)': total_quantity,
+        'Total Revenue (INR)': total_amount
+    })
+    category_summary_sorted = category_summary.sort_values(by='Total Quantity Sold (Units)', ascending=False)
+
+    # Create the funnel plot (horizontal bar chart)
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    sns.barplot(x=category_summary_sorted['Total Quantity Sold (Units)'],
+                y=category_summary_sorted['Category'],
+                palette="viridis")
+
+    ax.set_title('Categories by Quantity Sold')
+    ax.set_xlabel('Total Quantity Sold (Units)')
+    ax.set_ylabel('Category')
+    plt.tight_layout()
+    st.pyplot(fig)
+    st.markdown('---')
+
+    st.subheader('Categories by Revenue')
+    # Sort the category summary by total revenue (INR) in descending order
+    category_summary_sorted_by_revenue = category_summary.sort_values(by='Total Revenue (INR)', ascending=False)
+
+    # Create the funnel plot (horizontal bar chart) for revenue
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.barplot(x=category_summary_sorted_by_revenue['Total Revenue (INR)'],
+                y=category_summary_sorted_by_revenue['Category'],
+                palette="viridis")
+
+    ax.set_title('Categories by Revenue')
+    ax.set_xlabel('Total Revenue (INR)')
+    ax.set_ylabel('Category')
+    plt.tight_layout()
+    st.pyplot(fig)
+    st.markdown('---')
 
     st.subheader('Trend Analysis of the Categories')
     combined_category_data['date'] = pd.to_datetime(combined_category_data['month'], errors='coerce')  # Ensure proper datetime conversion with error handling
@@ -226,7 +271,6 @@ if section_name == 'Analytics':
     # Create a plot
     fig, ax = plt.subplots(figsize=(10, 6))
     monthly_trends.plot(ax=ax, subplots=True)
-
     # Setting title and labels
     ax.set_title('Monthly Sales Trends by Category')
     ax.set_xlabel('Date')
@@ -234,7 +278,34 @@ if section_name == 'Analytics':
     st.pyplot(fig)
 
     st.markdown('---')
-    st.subheader('Distribution Analysis')
+    st.subheader('Top 5 Products for Each Category')
+
+    categories_of_interest = ['Rice', 'Oils', 'Lentils']
+    filtered_data = retail_store_data[retail_store_data['category'].isin(categories_of_interest)]
+    category_sales = filtered_data.groupby(['category', 'product_name'])['total_quantity'].sum().reset_index()
+    category_sales_sorted = category_sales.sort_values(by=['category', 'total_quantity'], ascending=[True, False])
+    top_5_rice = category_sales_sorted[category_sales_sorted['category'] == 'Rice'].head(5)
+    top_5_oils = category_sales_sorted[category_sales_sorted['category'] == 'Oils'].head(5)
+    top_5_lentils = category_sales_sorted[category_sales_sorted['category'] == 'Lentils'].head(5)
+    top_5_combined = pd.concat([top_5_rice, top_5_oils, top_5_lentils])
+
+    # Create the barplot using seaborn
+    fig, ax = plt.subplots(figsize=(10, 6))
+    # Define custom colors correctly matched with category names
+    palette_colors = {'Rice': 'blue', 'Oils': 'purple', 'Lentils': 'green'}
+    sns.barplot(x='total_quantity', y='product_name', hue='category', data=top_5_combined, dodge=False, palette=palette_colors)
+
+    # Adding titles and labels
+    ax.set_title('Top 5 Products by Total Quantity for Each Category')
+    ax.set_xlabel('Total Quantity Sold')
+    ax.set_ylabel('Product Name')
+
+    # Display the plot
+    plt.tight_layout()
+    st.pyplot(fig)
+
+    st.markdown('---')
+    st.subheader('Dashboard')
     fig, ax = plt.subplots(figsize=(10, 6))
     combined_category_data.boxplot(column='total_quantity', by='category', ax=ax, grid=False)
 
@@ -388,7 +459,7 @@ if section_name == 'Models':
                                            options=category_names, index=None)
     
     if category_name_user_input == 'Rice':
-        tab1, tab2, tab3, tab4 = st.tabs(['LINEAR REGRESSION','ADABoost','XGBoost', 'RANDOM FOREST'])
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(['LINEAR REGRESSION','ADABoost','XGBoost', 'RANDOM FOREST', 'PREDICTIONS'])
         
         rice_data = retail_store_data[retail_store_data['category'] == 'Rice']
 
@@ -450,6 +521,7 @@ if section_name == 'Models':
         df_capped_rice = monthly_rice_sales_summary.copy()
         cap_outliers(df_capped_rice, 'total_quantity')
         cap_outliers(df_capped_rice, 'total_amount')
+
         with tab1:
             rice_data_lr = df_capped_rice.copy()
             for i in range(1, 3):
@@ -596,12 +668,37 @@ if section_name == 'Models':
             # Adjust layout
             plt.tight_layout()
             st.pyplot(fig)
+        with tab5:
+            # Take the last known data point (X_test.iloc[-1]) and create a copy
+            future_predictions = []
+            last_known_data = X_test.iloc[-1:].copy()
 
-        st.subheader('Predicted unit of Rice July')    
+            # Drop 'moving_average_2' from last_known_data if the model was trained without it
+            if 'moving_average_2' in last_known_data.columns:
+                last_known_data = last_known_data.drop(columns=['moving_average_2'])
+
+            # Start month-on-month predictions
+            for i in range(3):  # Predicting for the next 3 months
+                # Predict the next value
+                next_pred = xgb.predict(last_known_data)[0]
+
+                # Append the prediction to the list
+                future_predictions.append(next_pred)
+
+                # Update lag features using the predicted value
+                # Shift the lag features to prepare for the next prediction
+                last_known_data[f'moving_average_1'] = next_pred
+                last_known_data[f'moving_average_2'] = last_known_data[f'moving_average_1']
+
+                # Drop 'moving_average_2' again if necessary in this loop (if not used during training)
+                if 'moving_average_2' in last_known_data.columns:
+                    last_known_data = last_known_data.drop(columns=['moving_average_2'])
+
+            st.write(f'Predictions for July: {future_predictions[0]:.2f} KGS')    
+            st.write(f'Predictions for August: {future_predictions[1]:.2f} KGS')
+            st.write(f'Predictions for September: {future_predictions[2]:.2f} KGS')    
     
     if category_name_user_input == 'Oils':
-        tab1, tab2, tab3, tab4 = st.tabs(['LINEAR REGRESSION','ADABoost','XGBoost', 'RANDOM FOREST'])
-        
         oil_data = retail_store_data[retail_store_data['category'] == 'Oils']
         # Extract relevant columns for quantities and amounts
         quantity_columns = [col for col in oil_data.columns if 'quantity' in col.lower()]
@@ -664,9 +761,11 @@ if section_name == 'Models':
         cap_outliers(df_capped_oil, 'total_quantity')
         cap_outliers(df_capped_oil, 'total_amount')
 
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(['LINEAR REGRESSION','ADABoost','XGBoost', 'RANDOM FOREST', 'PREDICTIONS'])
+
         oil_data = df_capped_oil.copy()
         for i in range(1, 4):
-            oil_data[f'lag{i}'] = oil_data['total_quantity'].shift(i)
+            oil_data[f'moving_average{i}'] = oil_data['total_quantity'].shift(i)
 
         oil_data.dropna(inplace=True)  
         # Split data into features (X) and target variable (y)
@@ -784,10 +883,57 @@ if section_name == 'Models':
             ax.legend()
             # Adjust layout
             plt.tight_layout()
-            st.pyplot(fig)    
+            st.pyplot(fig) 
+        with tab5:
+            if 'moving_average_1' not in oil_data.columns:
+                oil_data['moving_average_1'] = oil_data['total_quantity'].shift(1)
+                oil_data['moving_average_2'] = oil_data['total_quantity'].shift(2)
+                oil_data['moving_average_3'] = oil_data['total_quantity'].shift(3)
+
+            # Now that 'moving_average_1' exists, proceed with your future prediction
+            last_total_amount = oil_data['total_amount'].iloc[-1]
+            last_year = oil_data['year'].iloc[-1]
+            last_quarter = oil_data['quarter'].iloc[-1]
+            last_month_num = oil_data['month_num'].iloc[-1]  # Assuming 'month_num' is the numeric representation of months
+            last_moving_avg1 = oil_data['moving_average_1'].iloc[-1]
+            last_moving_avg2 = oil_data['moving_average_2'].iloc[-1]
+            last_moving_avg3 = oil_data['moving_average_3'].iloc[-1]
+
+            # Create a DataFrame to hold future data for the next 3 months
+            future_data = pd.DataFrame({
+                'total_amount': [last_total_amount] * 3,  # Assuming future total amount remains the same for simplicity
+                'year': [last_year + 1] * 3,  # Increment the year for future predictions if necessary
+                'quarter': [(last_quarter % 4) + 1, ((last_quarter + 1) % 4) + 1, ((last_quarter + 2) % 4) + 1],  # Cycle through quarters
+                'month_num': [(last_month_num % 12) + 1, ((last_month_num + 1) % 12) + 1, ((last_month_num + 2) % 12) + 1],  # Add the 'month_num' column
+                'moving_average1': [last_moving_avg1, np.nan, np.nan],  # Use correct name as per training data
+                'moving_average2': [last_moving_avg2, np.nan, np.nan],  # Use correct name as per training data
+                'moving_average3': [last_moving_avg3, np.nan, np.nan]   # Use correct name as per training data
+            })
+
+            # Populate the 'moving_average' columns for future months
+            for i in range(1, 3):
+                future_data['moving_average1'].iloc[i] = future_data['moving_average1'].iloc[i-1]
+                future_data['moving_average2'].iloc[i] = future_data['moving_average2'].iloc[i-1]
+                future_data['moving_average3'].iloc[i] = future_data['moving_average3'].iloc[i-1]
+
+            # Step 2: Use the trained XGBoost model to predict the next 3 months
+            future_predictions = xgb.predict(future_data)
+
+            # Step 3: Display the predictions
+            future_months = ['Next Month 1', 'Next Month 2', 'Next Month 3']  # Placeholder names for future months
+            future_df = pd.DataFrame({
+                'month': future_months,
+                'predicted_quantity': future_predictions
+            })
+  
+
+            # Display the predicted values for each month
+            st.write(f"Predicted value for July: {future_df['predicted_quantity'][0]:.2f} Litres")
+            st.write(f"Predicted value for August: {future_df['predicted_quantity'][1]:.2f} Litres")
+            st.write(f"Predicted value for September: {future_df['predicted_quantity'][2]:.2f} Litres")    
 
     if category_name_user_input == 'Lentils':
-        tab1, tab2, tab3, tab4 = st.tabs(['LINEAR REGRESSION','ADABoost','XGBoost', 'RANDOM FOREST'])
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(['LINEAR REGRESSION','ADABoost','XGBoost', 'RANDOM FOREST', 'PREDICTIONS'])
        
         lentils_data = retail_store_data[retail_store_data['category'] == 'Lentils']
 
@@ -910,7 +1056,7 @@ if section_name == 'Models':
             st.subheader("ADABoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
             # Plot actual values
-            ax.plot(lentils_data_ada['month'], y, label='Actual', color='blue')
+            ax.plot(lentils_data_ada['month'][:len(y)], y, label='Actual', color='blue')
             # Plot predicted values (ensure the slicing of the predicted data starts from where the training data ends)
             ax.plot(lentils_data_ada['month'][len(X_train):], adaboost_pred, label='Predicted', color='red', linestyle='--')
             # Set labels and title
@@ -930,32 +1076,46 @@ if section_name == 'Models':
             lentils_data_xgb['rolling_mean2'] = lentils_data_xgb['total_quantity'].rolling(window=2).mean()
             for i in range(1, 2):
                 lentils_data_xgb[f'moving_average_{i}'] = lentils_data_xgb['total_quantity'].shift(i)
-            st.write('before: ', len(lentils_data_xgb))
-            lentils_data_xgb.dropna(inplace=True)
-            st.write('after: ', len(lentils_data_xgb))
 
+            lentils_data_xgb.dropna(inplace=True)
+            # Define X and y after dropping NaN values
+            X = lentils_data_xgb.drop(['month', 'total_quantity'], axis=1)
+            y = lentils_data_xgb['total_quantity']
+
+            # Split into train and test sets
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, shuffle=False)
+
+            # Fit the XGBoost model
             xgb = XGBRFRegressor()
             xgb.fit(X_train, y_train)
             xgb_pred = xgb.predict(X_test)
 
-            # st.subheader("XGBoost Model Parameters")
-            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,xgb_pred)),2)}")
-            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,xgb_pred),2)}")
-            # st.error(f"R2 SCORE : {round(r2_score(y_test,xgb_pred),2)}")
-            
+            # Plotting Actual vs Predicted Graph
             st.subheader("XGBoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
-            ax.plot(lentils_data_xgb['month'], y, label='Actual', color='blue')
-            ax.plot(lentils_data_xgb['month'][X_train:], xgb_pred, label='Predicted', color='red', linestyle='--')
+
+            # Adjust the 'month' column to match the length of 'y' after dropna()
+            months_for_actual = lentils_data_xgb['month']
+
+            # Plot actual values
+            ax.plot(months_for_actual, y, label='Actual', color='blue')
+
+            # Plot predicted values (ensure correct slicing for predictions)
+            ax.plot(months_for_actual[len(X_train):], xgb_pred, label='Predicted', color='red', linestyle='--')
+
+            # Set labels and title
             ax.set_xlabel('Month')
             ax.set_ylabel('Total Quantity')
             ax.set_title('Actual vs Predicted Values')
+
+            # Rotate the x-axis labels for better readability
             plt.xticks(rotation=45)
+
+            # Add legend
             ax.legend()
+
+            # Adjust layout
             plt.tight_layout()
-            
-            # Use Streamlit to render the plot
             st.pyplot(fig)
 
         with tab4:
@@ -963,10 +1123,10 @@ if section_name == 'Models':
             lentils_data_rf['rolling_mean2'] = lentils_data_rf['total_quantity'].rolling(window=2).mean()
             for i in range(1, 2):
                 lentils_data_rf[f'moving_average_{i}'] = lentils_data_rf['total_quantity'].shift(i)
-            st.write('before: ', len(lentils_data_rf))
 
-            lentils_data_rf = lentils_data_rf.dropna(inplace=True)
-            st.write('after: ', len(lentils_data_rf))
+            lentils_data_rf = lentils_data_rf.dropna()
+
+          
             # Split data into features (X) and target variable (y)
             X = lentils_data_rf.drop(['month', 'total_quantity'], axis=1)
             y = lentils_data_rf['total_quantity']
@@ -983,17 +1143,56 @@ if section_name == 'Models':
 
             st.subheader("Random Forest Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
-            # Ensure the month column is correctly used:
-            ax.plot(lentils_data_rf['month'][:len(y_train) + len(y_pred_rf)], y[:len(y_train) + len(y_pred_rf)], label='Actual', color='blue')
-            ax.plot(lentils_data_rf['month'][len(X_train):len(X_train) + len(y_pred_rf)], y_pred_rf, label='Predicted', color='red', linestyle='--')
-
+            # Plot actual values
+            ax.plot(lentils_data_rf['month'], y, label='Actual', color='blue')
+            # Plot predicted values (ensure the slicing of the predicted data starts from where the training data ends)
+            ax.plot(lentils_data_rf['month'][len(X_train):], y_pred_rf, label='Predicted', color='red', linestyle='--')
+            # Set labels and title
             ax.set_xlabel('Month')
             ax.set_ylabel('Total Quantity')
             ax.set_title('Actual vs Predicted Values')
+            # Rotate the x-axis labels for better readability
             plt.xticks(rotation=45)
+            # Add legend
             ax.legend()
+            # Adjust layout
             plt.tight_layout()
-            # st.pyplot(fig)
+            st.pyplot(fig)  
+        with tab5:
+            # Get the last known values from lentils_data_xgb
+            last_total_amount = lentils_data_xgb['total_amount'].iloc[-1]
+            last_year = lentils_data_xgb['year'].iloc[-1]
+            last_quarter = lentils_data_xgb['quarter'].iloc[-1]
+            last_rolling_mean2 = lentils_data_xgb['rolling_mean2'].iloc[-1]
+            last_moving_avg = lentils_data_xgb['moving_average_1'].iloc[-1]
+
+            # Create a DataFrame to hold future data
+            future_data = pd.DataFrame({
+                'total_amount': [last_total_amount] * 3,  # Assuming future total amount remains the same
+                'year': [last_year + 1] * 3,  # Increment the year for future predictions if necessary
+                'quarter': [(last_quarter % 4) + 1, ((last_quarter + 1) % 4) + 1, ((last_quarter + 2) % 4) + 1],  # Cycle through quarters
+                'rolling_mean2': [0] * 3,  # Use placeholder (0) since future rolling mean cannot be computed
+                'moving_average_1': [last_moving_avg, np.nan, np.nan]  # Start with the last known value
+            })
+
+            # Populate 'moving_average_1' for future months (similarly to how it was calculated before)
+            for i in range(1, 3):
+                future_data['moving_average_1'].iloc[i] = future_data['moving_average_1'].iloc[i-1]
+
+            # Step 2: Use the trained XGBoost model to predict the next 3 months
+            future_predictions = xgb.predict(future_data)
+
+            # Step 3: Print or plot the predictions
+            future_months = ['Month 1', 'Month 2', 'Month 3']  # Placeholder names for future months
+            future_df = pd.DataFrame({
+                'month': future_months,
+                'predicted_quantity': future_predictions
+            })
+
+            # Display the predicted values for each month
+            st.write(f"Predicted value for July: {future_df['predicted_quantity'][0]:.2f} KGS")
+            st.write(f"Predicted value for August: {future_df['predicted_quantity'][1]:.2f} KGS")
+            st.write(f"Predicted value for September: {future_df['predicted_quantity'][2]:.2f} KGS")
 
 
 
