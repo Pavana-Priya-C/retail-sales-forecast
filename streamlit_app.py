@@ -943,7 +943,6 @@ if section_name == 'Models':
             fig, ax = plt.subplots(figsize=(10, 6))
             # Plot actual values
             ax.plot(lentils_data_xgb['month'], y, label='Actual', color='blue')
-            # Plot predicted values (ensure the slicing of the predicted data starts from where the training data ends)
             ax.plot(lentils_data_xgb['month'][len(X_train):], xgb_pred, label='Predicted', color='red', linestyle='--')
             # Set labels and title
             ax.set_xlabel('Month')
@@ -980,8 +979,8 @@ if section_name == 'Models':
             fig, ax = plt.subplots(figsize=(10, 6))
             # Plot actual values
             ax.plot(lentils_data_rf['month'], y, label='Actual', color='blue')
-            # Plot predicted values (ensure the slicing of the predicted data starts from where the training data ends)
             ax.plot(lentils_data_rf['month'][len(X_train):], y_pred_rf, label='Predicted', color='red', linestyle='--')
+
             # Set labels and title
             ax.set_xlabel('Month')
             ax.set_ylabel('Total Quantity')
@@ -992,9 +991,7 @@ if section_name == 'Models':
             ax.legend()
             # Adjust layout
             plt.tight_layout()
-            st.pyplot(fig)    
-
-
+            st.pyplot(fig)   
 
 
 
