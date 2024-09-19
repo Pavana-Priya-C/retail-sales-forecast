@@ -946,21 +946,17 @@ if section_name == 'Models':
             
             st.subheader("XGBoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
-            # Plot actual values
-            ax.plot(lentils_data_xgb['month'][:len(y_train) + len(xgb_pred)], y[:len(y_train) + len(xgb_pred)], label='Actual', color='blue')
-            ax.plot(lentils_data_xgb['month'][len(X_train):len(X_train) + len(xgb_pred)], xgb_pred, label='Predicted', color='red', linestyle='--')
-
-            # Set labels and title
+            ax.plot(lentils_data_xgb['month'], y, label='Actual', color='blue')
+            ax.plot(lentils_data_xgb['month'][X_train:], xgb_pred, label='Predicted', color='red', linestyle='--')
             ax.set_xlabel('Month')
             ax.set_ylabel('Total Quantity')
             ax.set_title('Actual vs Predicted Values')
-            # Rotate the x-axis labels for better readability
             plt.xticks(rotation=45)
-            # Add legend
             ax.legend()
-            # Adjust layout
             plt.tight_layout()
-            # st.pyplot(fig)
+            
+            # Use Streamlit to render the plot
+            st.pyplot(fig)
 
         with tab4:
             lentils_data_rf = df_capped_lentils.copy()
