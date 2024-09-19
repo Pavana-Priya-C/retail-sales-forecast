@@ -930,7 +930,10 @@ if section_name == 'Models':
             lentils_data_xgb['rolling_mean2'] = lentils_data_xgb['total_quantity'].rolling(window=2).mean()
             for i in range(1, 2):
                 lentils_data_xgb[f'moving_average_{i}'] = lentils_data_xgb['total_quantity'].shift(i)
+            st.write('before: ', len(lentils_data_xgb))
             lentils_data_xgb.dropna(inplace=True)
+            st.write('after: ', len(lentils_data_xgb))
+
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, shuffle=False)
             xgb = XGBRFRegressor()
             xgb.fit(X_train, y_train)
@@ -944,8 +947,9 @@ if section_name == 'Models':
             st.subheader("XGBoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
             # Plot actual values
-            ax.plot(lentils_data_xgb['month'], y, label='Actual', color='blue')
-            ax.plot(lentils_data_xgb['month'][len(X_train):], xgb_pred, label='Predicted', color='red', linestyle='--')
+            ax.plot(lentils_data_xgb['month'][:len(y_train) + len(xgb_pred)], y[:len(y_train) + len(xgb_pred)], label='Actual', color='blue')
+            ax.plot(lentils_data_xgb['month'][len(X_train):len(X_train) + len(xgb_pred)], xgb_pred, label='Predicted', color='red', linestyle='--')
+
             # Set labels and title
             ax.set_xlabel('Month')
             ax.set_ylabel('Total Quantity')
@@ -956,16 +960,17 @@ if section_name == 'Models':
             ax.legend()
             # Adjust layout
             plt.tight_layout()
-            st.pyplot(fig)
+            # st.pyplot(fig)
 
         with tab4:
             lentils_data_rf = df_capped_lentils.copy()
             lentils_data_rf['rolling_mean2'] = lentils_data_rf['total_quantity'].rolling(window=2).mean()
             for i in range(1, 2):
                 lentils_data_rf[f'moving_average_{i}'] = lentils_data_rf['total_quantity'].shift(i)
-            
-            lentils_data_rf.dropna(inplace=True)
+            st.write('before: ', len(lentils_data_rf))
 
+            lentils_data_rf = lentils_data_rf.dropna(inplace=True)
+            st.write('after: ', len(lentils_data_rf))
             # Split data into features (X) and target variable (y)
             X = lentils_data_rf.drop(['month', 'total_quantity'], axis=1)
             y = lentils_data_rf['total_quantity']
@@ -992,7 +997,7 @@ if section_name == 'Models':
             plt.xticks(rotation=45)
             ax.legend()
             plt.tight_layout()
-            st.pyplot(fig)
+            # st.pyplot(fig)
 
 
 
