@@ -464,10 +464,10 @@ if section_name == 'Models':
             model.fit(X_train, y_train)
             y_pred = model.predict(X_test)
 
-            st.subheader("Linear Regression Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred),2)}")
+            # st.subheader("Linear Regression Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred),2)}")
 
             st.subheader("Linear Regression Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -500,10 +500,10 @@ if section_name == 'Models':
             adaboost.fit(X_train, y_train)
             adaboost_pred = adaboost.predict(X_test)
 
-            st.subheader("ADABoost Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,adaboost_pred)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,adaboost_pred),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,adaboost_pred),2)}")
+            # st.subheader("ADABoost Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,adaboost_pred)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,adaboost_pred),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,adaboost_pred),2)}")
             
             st.subheader("ADABoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -537,10 +537,10 @@ if section_name == 'Models':
             xgb.fit(X_train, y_train)
             xgb_pred = xgb.predict(X_test)  
 
-            st.subheader("XGBoost Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,xgb_pred)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,xgb_pred),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,xgb_pred),2)}")
+            # st.subheader("XGBoost Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,xgb_pred)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,xgb_pred),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,xgb_pred),2)}")
             
             st.subheader("XGBoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -574,10 +574,10 @@ if section_name == 'Models':
             rf_model.fit(X_train, y_train)
             y_pred_rf = rf_model.predict(X_test)  
 
-            st.subheader("Random Forest Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred_rf)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred_rf),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred_rf),2)}")
+            # st.subheader("Random Forest Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred_rf)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred_rf),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred_rf),2)}")
 
             st.subheader("Random Forest Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -677,10 +677,10 @@ if section_name == 'Models':
             model.fit(X_train, y_train)
             y_pred = model.predict(X_test)
 
-            st.subheader("Linear Regression Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred),2)}")
+            # st.subheader("Linear Regression Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred),2)}")
 
             st.subheader("Linear Regression Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -705,10 +705,10 @@ if section_name == 'Models':
             adaboost.fit(X_train, y_train)
             adaboost_pred = adaboost.predict(X_test)
 
-            st.subheader("ADABoost Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,adaboost_pred)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,adaboost_pred),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,adaboost_pred),2)}")
+            # st.subheader("ADABoost Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,adaboost_pred)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,adaboost_pred),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,adaboost_pred),2)}")
             
             st.subheader("ADABoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -733,10 +733,10 @@ if section_name == 'Models':
             xgb.fit(X_train, y_train)
             xgb_pred = xgb.predict(X_test)
 
-            st.subheader("XGBoost Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,xgb_pred)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,xgb_pred),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,xgb_pred),2)}")
+            # st.subheader("XGBoost Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,xgb_pred)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,xgb_pred),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,xgb_pred),2)}")
             
             st.subheader("XGBoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -761,10 +761,10 @@ if section_name == 'Models':
             rf_model.fit(X_train, y_train)
             y_pred_rf = rf_model.predict(X_test)
 
-            st.subheader("Random Forest Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred_rf)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred_rf),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred_rf),2)}")
+            # st.subheader("Random Forest Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred_rf)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred_rf),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred_rf),2)}")
 
             st.subheader("Random Forest Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -861,17 +861,17 @@ if section_name == 'Models':
             lr_model.fit(X_train, y_train)
             y_pred_lr = lr_model.predict(X_test)
 
-            st.subheader("Linear Regression Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred_lr)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred_lr),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred_lr),2)}")
+            # st.subheader("Linear Regression Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred_lr)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred_lr),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred_lr),2)}")
 
             st.subheader("Linear Regression Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
             # Plot actual values
-            ax.plot(lentil_data['month'], y, label='Actual', color='blue')
-            # Plot predicted values (ensure the slicing of the predicted data starts from where the training data ends)
+            ax.plot(lentil_data['month'][:len(y)], y, label='Actual', color='blue')
             ax.plot(lentil_data['month'][len(X_train):], y_pred_lr, label='Predicted', color='red', linestyle='--')
+
             # Setting labels and title
             ax.set_xlabel('Month')
             ax.set_ylabel('Total Quantity')
@@ -883,6 +883,8 @@ if section_name == 'Models':
             # Adjust layout
             plt.tight_layout()
             st.pyplot(fig)
+            plt.figure(figsize=(10, 6))
+
         with tab2:
             lentils_data_ada = df_capped_lentils.copy()
             lentils_data_ada['rolling_mean2'] = lentils_data_ada['total_quantity'].rolling(window=2).mean()
@@ -898,10 +900,10 @@ if section_name == 'Models':
             adaboost.fit(X_train, y_train)
             adaboost_pred = adaboost.predict(X_test)
 
-            st.subheader("ADABoost Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,adaboost_pred)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,adaboost_pred),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,adaboost_pred),2)}")
+            # st.subheader("ADABoost Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,adaboost_pred)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,adaboost_pred),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,adaboost_pred),2)}")
             
             st.subheader("ADABoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -932,10 +934,10 @@ if section_name == 'Models':
             xgb.fit(X_train, y_train)
             xgb_pred = xgb.predict(X_test)
 
-            st.subheader("XGBoost Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,xgb_pred)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,xgb_pred),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,xgb_pred),2)}")
+            # st.subheader("XGBoost Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,xgb_pred)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,xgb_pred),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,xgb_pred),2)}")
             
             st.subheader("XGBoost Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
@@ -969,10 +971,10 @@ if section_name == 'Models':
             rf_model.fit(X_train, y_train)
             y_pred_rf = rf_model.predict(X_test)
 
-            st.subheader("Random Forest Model Parameters")
-            st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred_rf)),2)}")
-            st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred_rf),2)}")
-            st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred_rf),2)}")
+            # st.subheader("Random Forest Model Parameters")
+            # st.warning(f"ROOT MEAN SQUARED ERROR : {round(np.sqrt(mean_squared_error(y_test,y_pred_rf)),2)}")
+            # st.info(f"MEAN ABSOLUTE ERROR : {round(mean_absolute_error(y_test,y_pred_rf),2)}")
+            # st.error(f"R2 SCORE : {round(r2_score(y_test,y_pred_rf),2)}")
 
             st.subheader("Random Forest Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
