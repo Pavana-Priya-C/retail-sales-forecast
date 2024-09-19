@@ -596,6 +596,8 @@ if section_name == 'Models':
             # Adjust layout
             plt.tight_layout()
             st.pyplot(fig)
+
+        st.subheader('Predicted unit of Rice July')    
     
     if category_name_user_input == 'Oils':
         tab1, tab2, tab3, tab4 = st.tabs(['LINEAR REGRESSION','ADABoost','XGBoost', 'RANDOM FOREST'])
@@ -961,10 +963,13 @@ if section_name == 'Models':
             lentils_data_rf['rolling_mean2'] = lentils_data_rf['total_quantity'].rolling(window=2).mean()
             for i in range(1, 2):
                 lentils_data_rf[f'moving_average_{i}'] = lentils_data_rf['total_quantity'].shift(i)
+            
             lentils_data_rf.dropna(inplace=True)
+
             # Split data into features (X) and target variable (y)
             X = lentils_data_rf.drop(['month', 'total_quantity'], axis=1)
             y = lentils_data_rf['total_quantity']
+
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, shuffle=False)
             rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
             rf_model.fit(X_train, y_train)
@@ -977,21 +982,17 @@ if section_name == 'Models':
 
             st.subheader("Random Forest Model Actual Vs Predicted Graph")
             fig, ax = plt.subplots(figsize=(10, 6))
-            # Plot actual values
-            ax.plot(lentils_data_rf['month'], y, label='Actual', color='blue')
-            ax.plot(lentils_data_rf['month'][len(X_train):], y_pred_rf, label='Predicted', color='red', linestyle='--')
+            # Ensure the month column is correctly used:
+            ax.plot(lentils_data_rf['month'][:len(y_train) + len(y_pred_rf)], y[:len(y_train) + len(y_pred_rf)], label='Actual', color='blue')
+            ax.plot(lentils_data_rf['month'][len(X_train):len(X_train) + len(y_pred_rf)], y_pred_rf, label='Predicted', color='red', linestyle='--')
 
-            # Set labels and title
             ax.set_xlabel('Month')
             ax.set_ylabel('Total Quantity')
             ax.set_title('Actual vs Predicted Values')
-            # Rotate the x-axis labels for better readability
             plt.xticks(rotation=45)
-            # Add legend
             ax.legend()
-            # Adjust layout
             plt.tight_layout()
-            st.pyplot(fig)   
+            st.pyplot(fig)
 
 
 
