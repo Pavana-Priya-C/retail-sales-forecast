@@ -213,6 +213,7 @@ with st.sidebar:
 #     st.image(retail_store_image)
 
 if section_name == 'Dashboard':
+    st.header('Retail Store Sales Insights')
 
     st.subheader('Categories by Quantity Sold')
     category_data = retail_store_data.groupby('category').sum().reset_index()
@@ -305,7 +306,7 @@ if section_name == 'Dashboard':
     st.pyplot(fig)
 
     st.markdown('---')
-    st.subheader('Dashboard')
+    st.subheader('Distribution Analysis')
     fig, ax = plt.subplots(figsize=(10, 6))
     combined_category_data.boxplot(column='total_quantity', by='category', ax=ax, grid=False)
 
