@@ -318,7 +318,7 @@ if section_name == 'Dashboard':
     st.pyplot(fig)
 
     st.markdown('---')
-    st.subheader("Models")
+    st.subheader("Select Category")
     category_name_user_input = st.selectbox("Select category",
                                            options=category_names, index=None)
     st.subheader("Select year")
@@ -455,7 +455,7 @@ if section_name == 'Dashboard':
             st.pyplot(fig)
 
 if section_name == 'Models':
-    st.subheader("Select Category")
+    st.subheader("Select Category for Model")
     category_name_user_input = st.selectbox("Select category",
                                            options=category_names, index=None)
     
